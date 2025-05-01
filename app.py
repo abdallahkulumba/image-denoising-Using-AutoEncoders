@@ -96,10 +96,10 @@ if option == "Upload Your Image":
         col1, col2 = st.columns(2)
 
         with col1:
-            st.image(noisy_img, caption="Noisy Uploaded Image (Gaussian Noise Applied)", use_column_width=True, clamp=True)
+            st.image(noisy_img, caption="Noisy Uploaded Image (Gaussian Noise Applied)", use_container_width=True, clamp=True)
 
         with col2:
-            st.image(denoised_img, caption="Denoised Output", use_column_width=True, clamp=True)
+            st.image(denoised_img, caption="Denoised Output", use_container_width=True, clamp=True)
 
 elif option == "Use MNIST Sample":
     index = st.slider("Select an MNIST image index:", 1, len(mnist_dataset_clean), 1)
@@ -124,13 +124,13 @@ elif option == "Use MNIST Sample":
     col1, col2, col3 = st.columns(3)
 
     with col1:
-        st.image(clean_img, caption="Original MNIST Image", use_column_width=True, clamp=True)
+        st.image(clean_img, caption="Original MNIST Image", use_container_width=True, clamp=True)
 
     with col2:
-        st.image(noisy_img, caption="Noisy Image (Gaussian Noise)", use_column_width=True, clamp=True)
+        st.image(noisy_img, caption="Noisy Image (Gaussian Noise)", use_container_width=True, clamp=True)
 
     with col3:
-        st.image(denoised_img, caption="Denoised Output", use_column_width=True, clamp=True)
+        st.image(denoised_img, caption="Denoised Output", use_container_width=True, clamp=True)
 
 st.write("App is Running!")  # Debugging output
 
