@@ -49,56 +49,92 @@ except Exception as e:
     st.error(f"Error loading model: {e}")
     st.stop()
 
+# --- Define Noise Addition ---
+def add_gaussian_noise(image_tensor, noise_std=0.5):
+    noisy_tensor = image_tensor + noise_std * torch.randn_like(image_tensor)  # Add Gaussian noise
+    return torch.clamp(noisy_tensor, 0., 1.)  # Clamp values between 0 and 1
+
 # --- Load MNIST Dataset and Apply Gaussian Noise ---
-transform_clean = transforms.Compose([
-    transforms.ToTensor()
-])
+transform_clean = transforms.Compose([transforms.ToTensor()])
 
 transform_noisy = transforms.Compose([
     transforms.ToTensor(),
-    transforms.Lambda(lambda x: x + 0.5 * torch.randn_like(x)),  # Add Gaussian noise
-    transforms.Lambda(lambda x: torch.clamp(x, 0., 1.))  # Clamp values between 0 and 1
+    transforms.Lambda(lambda x: add_gaussian_noise(x, noise_std=0.5))  # Apply Gaussian noise
 ])
 
 mnist_dataset_clean = torchvision.datasets.MNIST(root="./data", train=False, download=True, transform=transform_clean)
 mnist_dataset_noisy = torchvision.datasets.MNIST(root="./data", train=False, download=True, transform=transform_noisy)
 
 # --- Streamlit UI ---
-st.title("Mnist Denoising Autoencoder")
-st.write("Select a sample from the MNIST dataset, add Gaussian noise, and denoise using the trained model.")
+st.title("MNIST Denoising Autoencoder")
+st.write("Upload your own image or select a sample from the MNIST dataset for denoising.")
 
-index = st.slider("Select an MNIST image index:", 0, len(mnist_dataset_clean)-1, 0)
+# --- User Selection ---
+option = st.radio("Choose an input method:", ("Upload Your Image", "Use MNIST Sample"))
 
-# Get clean and noisy image tensors
-image_clean, _ = mnist_dataset_clean[index]
-image_noisy, _ = mnist_dataset_noisy[index]
+if option == "Upload Your Image":
+    uploaded_image = st.file_uploader("Upload an image", type=["png", "jpg", "jpeg"])
+    
+    if uploaded_image:
+        image = Image.open(uploaded_image).convert("L")  # Convert to grayscale
+        image = transforms.Resize((28, 28))(image)  # Resize to match MNIST dimensions
+        image_tensor = transforms.ToTensor()(image).unsqueeze(0)  # Add batch dimension
+        
+        # Apply Gaussian noise to uploaded image
+        noisy_image_tensor = add_gaussian_noise(image_tensor)
 
-input_tensor = image_noisy.unsqueeze(0)  # Add batch dimension [1, 1, 28, 28]
+        # --- Denoising Process ---
+        with torch.no_grad():
+            denoised_tensor = model(noisy_image_tensor)
 
-# --- Denoising Process ---
-with torch.no_grad():
-    denoised_tensor = model(input_tensor)
+        # Convert to numpy for display
+        noisy_img = noisy_image_tensor.squeeze().numpy()
+        denoised_img = denoised_tensor.squeeze().numpy()
 
-# Convert to numpy for display
-clean_img = image_clean.squeeze().numpy()
-noisy_img = image_noisy.squeeze().numpy()
-denoised_img = denoised_tensor.squeeze().numpy()
+        # --- Display Images ---
+        st.subheader("🔍 Uploaded Image Processing")
+        col1, col2 = st.columns(2)
 
-# --- Display Images ---
-st.subheader("🔍 Input vs Noisy vs Denoised Output")
-col1, col2, col3 = st.columns(3)
+        with col1:
+            st.image(noisy_img, caption="Noisy Uploaded Image (Gaussian Noise Applied)", use_column_width=True, clamp=True)
 
-with col1:
-    st.image(clean_img, caption="Original MNIST Image", use_column_width=True, clamp=True)
+        with col2:
+            st.image(denoised_img, caption="Denoised Output", use_column_width=True, clamp=True)
 
-with col2:
-    st.image(noisy_img, caption="Noisy Image (Gaussian Noise)", use_column_width=True, clamp=True)
+elif option == "Use MNIST Sample":
+    index = st.slider("Select an MNIST image index:", 1, len(mnist_dataset_clean), 1)
 
-with col3:
-    st.image(denoised_img, caption="Denoised Output", use_column_width=True, clamp=True)
+    # Get clean and noisy image tensors
+    image_clean, _ = mnist_dataset_clean[index]
+    image_noisy, _ = mnist_dataset_noisy[index]
+
+    input_tensor = image_noisy.unsqueeze(0)  # Add batch dimension [1, 1, 28, 28]
+
+    # --- Denoising Process ---
+    with torch.no_grad():
+        denoised_tensor = model(input_tensor)
+
+    # Convert to numpy for display
+    clean_img = image_clean.squeeze().numpy()
+    noisy_img = image_noisy.squeeze().numpy()
+    denoised_img = denoised_tensor.squeeze().numpy()
+
+    # --- Display Images ---
+    st.subheader("🔍 Input vs Noisy vs Denoised Output")
+    col1, col2, col3 = st.columns(3)
+
+    with col1:
+        st.image(clean_img, caption="Original MNIST Image", use_column_width=True, clamp=True)
+
+    with col2:
+        st.image(noisy_img, caption="Noisy Image (Gaussian Noise)", use_column_width=True, clamp=True)
+
+    with col3:
+        st.image(denoised_img, caption="Denoised Output", use_column_width=True, clamp=True)
 
 st.write("App is Running!")  # Debugging output
-# Sidebar: About the Author Section
+
+# --- Sidebar: About the Author ---
 st.sidebar.write("## About the Author")
 st.sidebar.write("""
 **Author:** Sserujja Abdallah Kulumba  
@@ -108,3 +144,5 @@ st.sidebar.write("""
 **LinkedIn:** [linkedin.com/in/Abdallahkulumba](https://www.linkedin.com/in/abdallah-kulumba-sserujja/)  
 **Facebook:** [facebook.com/Abdallahkulumba](https://www.facebook.com/abdallah.ed.ak)  
 """)
+st.sidebar.write("## About the Project")
+st.sidebar.write("""The project was developed as part of the **Deep Learning** course at the **Islamic University of Technology**.""")
