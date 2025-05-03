@@ -12,6 +12,7 @@ import matplotlib.pyplot as plt
 from io import BytesIO
 import base64
 
+
 # --- Environment Setup ---
 os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
 
@@ -100,41 +101,16 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="expanded"
 )
-# Add this CSS at the beginning of your script (right after imports)
-st.markdown("""
-<style>
-    /* Custom CSS for large navigation buttons */
-    .stTabs [role="tablist"] button {
-        font-size: 18px !important;
-        padding: 12px 24px !important;
-        height: auto !important;
-        margin: 0 8px !important;
-    }
-    
-    /* Hover effect */
-    .stTabs [role="tablist"] button:hover {
-        background-color: #f0f2f6 !important;
-        transform: scale(1.05);
-    }
-    
-    /* Active tab styling */
-    .stTabs [aria-selected="true"] {
-        background-color: #4CAF50 !important;
-        color: white !important;
-        font-weight: bold !important;
-    }
-</style>
-""", unsafe_allow_html=True)
 
 
 # --- Navigation Tabs ---
 tabs = ["🏠 Home", "🔬 Project", "🧠 Methodology", "📊 Results", "🚀 Future Work", "👥 About Us"]
-page = st.sidebar.radio("Navigation", tabs)
+page = st.sidebar.radio(" Navigation", tabs)
 
 # --- Sidebar (Consistent across pages) ---
 with st.sidebar:
     
-    if page in ["🏠 Home", "📊 Results"]:
+    if page in ["📊 Results"]:
         st.markdown("---")
         st.subheader("Demo Settings")
         dataset_name = st.selectbox("Select Dataset", list(DATASETS.keys()))
@@ -170,8 +146,6 @@ if page == "🏠 Home":
 
 elif page == "🔬 Project":
     st.title("Project Genesis")
-
-    #st.markdown('<h4><b>🚀 Motivation</b></h4>', unsafe_allow_html=True)
     
     with st.expander(  " 🚀 Motivation ", expanded = True):
 
@@ -241,7 +215,7 @@ elif page == "🧠 Methodology":
     with cols[2]:
         st.markdown("""
         ### Experimental Hardware
-        - **Model**: NVIDIA T4 GPU
+        - **Model**: NVIDIA T4 GPU or CPU
         - **Framework**: Pytorch 1.9.0
         - **CUDA**: 11.1
         - **Python**: 3.8.10
@@ -249,6 +223,18 @@ elif page == "🧠 Methodology":
         - **OS**: windows 10
         """)
         st.image("image/im6.png", use_column_width=True)
+
+    st.markdown("""
+    ## Model Architecture
+
+    <span style='font-size:18px'>
+    Inside the model architecture, we have used a (CNN) as the encoder and decoder. 
+    The encoder compresses the input image into a lower-dimensional representation, while the decoder
+    reconstructs the image from this representation. The model is trained to minimize the difference
+    between the original and reconstructed images using a loss function that combines mean squared 
+    error (MSE) and perceptual loss. <span>""", unsafe_allow_html=True)
+    st.write("")
+    st.image("image/im8.jpg", use_column_width=True)
 
 
 elif page == "📊 Results":
@@ -281,18 +267,32 @@ elif page == "📊 Results":
         with cols[2]:
             st.image(denoised_img, caption="Denoised", use_column_width=True)
             
-            # Download button
             buffered = BytesIO()
             denoised_img.save(buffered, format="PNG")
+
+                # Add custom styling
+            st.markdown( """
+                
+               <style>
+                   .big-button button {
+                   font-size: 20px !important;
+                  padding: 10px 20px !important;
+                          }
+                           </style>
+                                     """ ,unsafe_allow_html=True )
+
+               # Apply CSS class to download button
+            st.markdown('<div class="big-button">', unsafe_allow_html=True)
             st.download_button(
-                label="Download Denoised Image",
-                data=buffered.getvalue(),
-                file_name="denoised_image.png",
-                mime="image/png"
-            )
+                  label="⬇️ Download Denoised Image",
+                 data=buffered.getvalue(),
+               file_name="denoised_image.png",
+                  mime="image/png"
+                  )
+            st.markdown('</div>', unsafe_allow_html=True)
+
 
         # --- Compute Real Evaluation Metrics ---
-        os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
         
         image_clean = clean_image.unsqueeze(0)  # Ensure matching shape [1, 1, 28, 28]
         mse_loss = torch.nn.functional.mse_loss(denoised_tensor, image_clean).item()
@@ -362,6 +362,7 @@ elif page == "🚀 Future Work":
     """)
     
     st.image("image/im3.png", use_column_width=True)
+    
 
 elif page == "👥 About Us":
     st.title("Our Team")
@@ -390,12 +391,21 @@ elif page == "👥 About Us":
         **Email:** farihaalam@iut-dhaka.edu   
         **GitHub:** [github.com/farrihaa](https://github.com/farrihaa)    
        """)
-    for i in range(4):
+    for i in range(3):
         st.write("")
-    
+    st.markdown("## Project Supervisor")
     st.markdown("""
-    #### Md. Arefin Rabbi Emon  
-    **Email:** arefinrabbi@iut-dhaka.edu  
-    **Position:** Lecturer, EEE Department IUT 
-    **Afiliation:** Islamic University of Technology (IUT)
+    #### Md. Arefin Rabbi Emon Sir 
+    **Email:** arefinrabbi@iut-dhaka.edu                                               
+    **Position:** Lecturer, EEE Department                               
+    **Affiliation:** Islamic University of Technology (IUT)  
     """)
+
+st.markdown(
+    """
+    <hr>
+    <footer style="text-align: center; font-size: 14px;">
+        <p>© 4709 Machine Learning Course EEE IUT </p>    
+    </footer>
+""",  unsafe_allow_html=True)
+
