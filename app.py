@@ -133,7 +133,7 @@ if page == "🏠 Home":
     """, unsafe_allow_html=True)
     for i in range(2):
         st.write("")
-    st.image("image/im1.jpg", use_column_width=True)
+    st.image("image/im1.jpg", use_container_width=True)
     cols = st.columns(3)
     with cols[0]:
         st.metric("Imaging Market", "$45B+", "8.2% CAGR")
@@ -183,7 +183,7 @@ elif page == "🔬 Project":
     ## Project Timeline
     ##### Below is a visual representation of our project model from inception to completion.
     """)
-    st.image("image/im4.png", use_column_width=True)
+    st.image("image/im4.png", use_container_width=True)
 
 elif page == "🧠 Methodology":
     st.title("Technical Approach")
@@ -200,7 +200,7 @@ elif page == "🧠 Methodology":
         - Batch normalization and dropout
 
         """)
-        st.image("image/im7.png", use_column_width=True)
+        st.image("image/im7.png", use_container_width=True)
     
     with cols[1]:
         st.markdown("""
@@ -210,7 +210,7 @@ elif page == "🧠 Methodology":
         - **Training**: 100 epochs, Adam optimizer
         - **DL Model**: Convolution Neural Network (CNN)
         """)
-        st.image("image/im5.png", use_column_width=True)
+        st.image("image/im5.png", use_container_width=True)
 
     with cols[2]:
         st.markdown("""
@@ -222,7 +222,7 @@ elif page == "🧠 Methodology":
         - **Training**: 100 epochs, Adam optimizer
         - **OS**: windows 10
         """)
-        st.image("image/im6.png", use_column_width=True)
+        st.image("image/im6.png", use_container_width=True)
 
     st.markdown("""
     ## Model Architecture
@@ -234,7 +234,7 @@ elif page == "🧠 Methodology":
     between the original and reconstructed images using a loss function that combines mean squared 
     error (MSE) and perceptual loss. <span>""", unsafe_allow_html=True)
     st.write("")
-    st.image("image/im8.jpg", use_column_width=True)
+    st.image("image/im8.jpg", use_container_width=True)
 
 
 elif page == "📊 Results":
@@ -261,11 +261,11 @@ elif page == "📊 Results":
         # Display results
         cols = st.columns(3)
         with cols[0]:
-            st.image(clean_img, caption="Original", use_column_width=True)
+            st.image(clean_img, caption="Original", use_container_width=True)
         with cols[1]:
-            st.image(noisy_img, caption=f"Noisy (σ={noise_level})", use_column_width=True)
+            st.image(noisy_img, caption=f"Noisy (σ={noise_level})", use_container_width=True)
         with cols[2]:
-            st.image(denoised_img, caption="Denoised", use_column_width=True)
+            st.image(denoised_img, caption="Denoised", use_container_width=True)
             
             buffered = BytesIO()
             denoised_img.save(buffered, format="PNG")
@@ -361,7 +361,7 @@ elif page == "🚀 Future Work":
     ## Roadmap
     """)
     
-    st.image("image/im3.png", use_column_width=True)
+    st.image("image/im3.png", use_container_width=True)
     
 
 elif page == "👥 About Us":
