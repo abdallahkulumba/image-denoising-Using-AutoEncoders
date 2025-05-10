@@ -16,7 +16,8 @@ Key Features:
 
 ## Implementation
 
-you can check out the project website by pressing the button below or useing the direct link
+you can check out the project website by pressing the button below 
+
 [![View App](https://img.shields.io/badge/Live_App-Click_Here-blue)](https://image-denoising-using-autoencoders.streamlit.app/)
 
 Direct link : (https://image-denoising-using-autoencoders.streamlit.app/)
