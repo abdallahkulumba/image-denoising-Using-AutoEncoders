@@ -14,6 +14,11 @@ Key Features:
 - **Noise Addition**: Gaussian noise is added to the input images.
 - **Visualization**: Visual comparison of noisy, clean, and denoised images after training.
 
+## Implementation
+
+[![View App](https://img.shields.io/badge/Live_App-Click_Here-blue)](https://image-denoising-using-autoencoders.streamlit.app/)
+
+
 ## Dependencies
 
 To run this project, you'll need the following libraries:
