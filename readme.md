@@ -18,6 +18,7 @@ Key Features:
 The model inputs noisy images and after training it learns to denoise these images and restore the complete clear images as before thus denoising ability
 
 ![Alt text](pic.png?raw=true "sample")
+
 you can check out the project website by pressing the button below 
 
 [![View App](https://img.shields.io/badge/Live_App-Click_Here-blue)](https://image-denoising-using-autoencoders.streamlit.app/)
