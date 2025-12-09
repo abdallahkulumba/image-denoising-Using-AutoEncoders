@@ -1,9 +1,8 @@
 # Basic Autoencoder for Noise Reduction
-![Alt text](Capture.PNG?raw=true "sample")
 
 This project implements a basic autoencoder using PyTorch to reduce noise in grayscale images. The autoencoder learns to map noisy images to their clean versions, effectively denoising them.
 
-![Alt text](pic.png?raw=true "sample")
+![Alt text](Capture.PNG?raw=true "sample")
 
 ## Overview
 
@@ -16,7 +15,9 @@ Key Features:
 - **Visualization**: Visual comparison of noisy, clean, and denoised images after training.
 
 ## Implementation
+The model inputs noisy images and after training it learns to denoise these images and restore the complete clear images as before thus denoising ability
 
+![Alt text](pic.png?raw=true "sample")
 you can check out the project website by pressing the button below 
 
 [![View App](https://img.shields.io/badge/Live_App-Click_Here-blue)](https://image-denoising-using-autoencoders.streamlit.app/)
