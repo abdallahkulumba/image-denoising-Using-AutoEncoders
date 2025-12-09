@@ -1,4 +1,5 @@
 # Basic Autoencoder for Noise Reduction
+![Alt text](Capture.PNG?raw=true "sample")
 
 This project implements a basic autoencoder using PyTorch to reduce noise in grayscale images. The autoencoder learns to map noisy images to their clean versions, effectively denoising them.
 
